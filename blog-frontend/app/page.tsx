@@ -84,7 +84,7 @@ export default function HomePage() {
       </div>
 
       {/* The responsive grid now maps over the `filteredPosts` array */}
-      <div className="posts-grid">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         {filteredPosts.map((post) => (
           <Link key={post._id} href={`/post/${post._id}`} className="post-card">
             <div className="post-card-image-wrapper">
@@ -117,7 +117,7 @@ export default function HomePage() {
       {/* This message shows ONLY when a search is active but returns no results. */}
       {posts.length > 0 && filteredPosts.length === 0 && (
         <p className="status-message">
-          No results found for "{searchQuery}". Try a different term.
+          No results found for `{searchQuery}`. Try a different term.
         </p>
       )}
 

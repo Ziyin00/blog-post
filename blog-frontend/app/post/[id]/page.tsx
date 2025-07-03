@@ -2,12 +2,14 @@
 
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
-import axios from "@/utils/axios";
+import axios, { isAxiosError } from "axios"; // Import `isAxiosError` for type checking
 import CommentForm from "@/components/CommentForm";
 
 // ==================================================================
-// YOUR LOGIC - 100% UNCHANGED
+// LOGIC WITH UPGRADED TYPE-SAFETY
 // ==================================================================
+
+// The final, normalized shape of a comment for the UI
 type Comment = {
   _id: string;
   text: string;
@@ -15,12 +17,24 @@ type Comment = {
   createdAt: string;
 };
 
+// The shape of a Post object
 type Post = {
   _id: string;
   title: string;
   description: string;
   image?: string;
   createdAt?: string;
+};
+
+// NEW: Define the shape of the raw comment data from the API
+type RawComment = {
+  _id: string;
+  text: string;
+  createdAt: string;
+  user?: {
+    // The user object can be optional
+    name: string;
+  };
 };
 
 export default function PostDetailsPage() {
@@ -34,30 +48,38 @@ export default function PostDetailsPage() {
       const res = await axios.get(`/posts/${id}`);
       setPost(res.data);
     } catch (err) {
-      console.error("Error loading post", err);
+      // UPGRADED: Type-safe error handling
+      if (isAxiosError(err)) {
+        console.error("Axios error loading post:", err.response?.data);
+      } else {
+        console.error("Error loading post:", err);
+      }
     } finally {
-      // We set loading to false only after the post is fetched
-      // to avoid showing content before the main data is ready.
       setLoading(false);
     }
   };
 
   const fetchComments = async () => {
     try {
-      const res = await axios.get(`/posts/${id}/comments`);
-      const data: any[] = res.data;
+      // UPGRADED: Tell Axios what type of data to expect
+      const res = await axios.get<RawComment[]>(`/posts/${id}/comments`);
 
-      // Normalize comments
-      const normalized = data.map((comment) => ({
+      // `res.data` is now correctly typed as `RawComment[]`, no more `any`!
+      const normalized = res.data.map((comment) => ({
         _id: comment._id,
         text: comment.text,
-        authorName: comment.user?.name || "Unknown",
+        authorName: comment.user?.name || "Anonymous", // Provide a fallback
         createdAt: comment.createdAt,
       }));
 
       setComments(normalized);
     } catch (err) {
-      console.error("Error loading comments", err);
+      // UPGRADED: Type-safe error handling
+      if (isAxiosError(err)) {
+        console.error("Axios error loading comments:", err.response?.data);
+      } else {
+        console.error("Error loading comments:", err);
+      }
     }
   };
 
@@ -68,14 +90,13 @@ export default function PostDetailsPage() {
     }
   }, [id]);
   // ==================================================================
-  // END OF YOUR LOGIC
+  // END OF LOGIC
   // ==================================================================
 
   // ==================================================================
-  // THE NEW, AMAZING & PROFESSIONAL UI
+  // THE AMAZING & PROFESSIONAL UI (Unchanged)
   // ==================================================================
 
-  // Styled loading and not-found states
   if (loading) {
     return (
       <main className="page-container">
@@ -93,9 +114,7 @@ export default function PostDetailsPage() {
 
   return (
     <main className="post-detail-page">
-      {/* The main article content, with a semantic <article> tag */}
       <article className="post-article">
-        {/* A grand header for the title and metadata */}
         <header className="post-header-container">
           {post.image && (
             <div className="post-featured-image-wrapper">
@@ -124,30 +143,21 @@ export default function PostDetailsPage() {
           </div>
         </header>
 
-        {/* The main body of the post, optimized for reading */}
         <div className="post-body-content">
-          {/* Your post.description is the primary content */}
           <p>{post.description}</p>
-
-          {/* Example of how other rich text elements would look with our styling */}
         </div>
       </article>
 
-      {/* The comments section, styled to be distinct from the article */}
       <section className="comments-section">
         <div className="comments-container">
           <h2 className="comments-title">Join the Conversation</h2>
-
-          {/* Your CommentForm is now perfectly integrated */}
           <CommentForm postId={post._id} onSuccess={fetchComments} />
-
           <div className="comments-list">
             {comments.length === 0 ? (
               <p className="no-comments-message">
                 Be the first to leave a comment.
               </p>
             ) : (
-              // Your comments.map logic now renders our beautiful comment cards
               comments.map((comment) => (
                 <div key={comment._id} className="comment-card">
                   <p className="comment-text">{comment.text}</p>

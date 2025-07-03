@@ -252,7 +252,7 @@ h1 {
 
 /* A container for page content to keep it centered and spaced */
 .page-container {
-  max-width: 1200px;
+  max-width: screen;
   margin: 0 auto;
   /* Adjust top padding to be below the fixed navbar */
   padding: 3rem 2rem 2rem; 
@@ -810,4 +810,105 @@ h1 {
 .search-bar-input::placeholder {
   color: var(--color-text-secondary);
   opacity: 0.7;
+}
+
+/* Update body and add main tag styles for sticky footer */
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+main {
+  flex-grow: 1; /* Pushes the footer down */
+}
+
+/* ==================================================================
+   13. FOOTER STYLES
+   ================================================================== */
+
+.main-footer {
+  padding: 4rem 2rem 2rem;
+  background: var(--color-surface-background);
+  border-top: 1px solid var(--color-surface-border);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  margin-top: 4rem; /* Ensures space above footer */
+}
+
+.footer-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  /* Responsive grid: 1 column on mobile, up to 3 on desktop */
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2.5rem;
+}
+
+.footer-column {
+  display: flex;
+  flex-direction: column;
+}
+
+.footer-brand-name {
+  font-size: 1.75rem;
+  font-weight: 900;
+  margin: 0 0 0.5rem 0;
+  /* Use the gradient for our brand name */
+  background: var(--gradient-accent);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-fill-color: transparent;
+}
+
+.footer-copyright {
+  font-size: 0.875rem;
+  color: var(--color-text-secondary);
+  line-height: 1.6;
+  margin: 0;
+}
+
+.footer-heading {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--color-text-heading);
+  margin: 0 0 1rem 0;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.footer-links ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.footer-links a {
+  color: var(--color-text-secondary);
+  text-decoration: none;
+  transition: color var(--transition-speed) ease;
+}
+
+.footer-links a:hover {
+  color: var(--color-text-heading);
+  text-decoration: underline;
+}
+
+.social-icons-list {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.social-icons-list a {
+  color: var(--color-text-secondary);
+  transition: all var(--transition-speed) ease;
+}
+
+.social-icons-list a:hover {
+  color: var(--color-text-heading);
+  transform: scale(1.2) translateY(-2px);
 }

@@ -1,13 +1,13 @@
 "use client";
 
 import { useForm } from "react-hook-form";
-import axios from "@/utils/axios";
 import { useAuth } from "@/store/auth";
+import axios, { isAxiosError } from "axios"; // Import `isAxiosError` for type checking
 import { useState } from "react";
-import { User } from "lucide-react"; // For the user avatar placeholder
+import { User } from "lucide-react";
 
 // ==================================================================
-// YOUR LOGIC - 100% UNCHANGED
+// LOGIC WITH UPGRADED, TYPE-SAFE ERROR HANDLING
 // ==================================================================
 type FormFields = { text: string };
 type CommentFormProps = { postId: string; onSuccess: () => void };
@@ -24,51 +24,59 @@ export default function CommentForm({ postId, onSuccess }: CommentFormProps) {
           Authorization: `Bearer ${token}`,
         },
       });
-      reset(); // Clear the form on success
-      onSuccess(); // Re-fetch comments to show the new one
-      setError(""); // Clear any previous errors
-    } catch (err: any) {
-      setError(err.response?.data?.message || "Failed to add comment");
+      reset();
+      onSuccess();
+      setError("");
+    } catch (err) {
+      // UPGRADED: Type-safe error handling
+      if (isAxiosError(err)) {
+        // This is a specific error from the backend via Axios
+        setError(
+          err.response?.data?.message ||
+            "Failed to add comment. Please try again."
+        );
+      } else if (err instanceof Error) {
+        // This is a generic JavaScript error
+        setError(err.message);
+      } else {
+        // This is an unexpected error type
+        setError("An unexpected error occurred while posting your comment.");
+      }
     }
   };
 
-  // This crucial piece of logic is preserved.
-  // The form will not render at all if the user is not logged in.
+  // This crucial logic is preserved. The form will not render if the user is not logged in.
   if (!token) {
     return null;
   }
   // ==================================================================
-  // END OF YOUR LOGIC
+  // END OF LOGIC
   // ==================================================================
 
   // ==================================================================
-  // THE NEW, AMAZING & PROFESSIONAL UI
-  // This JSX is structured for our new CSS, but wired to your logic.
+  // THE AMAZING & PROFESSIONAL UI (Unchanged)
   // ==================================================================
   return (
     <div className="comment-form-wrapper">
       <div className="comment-form-avatar">
-        {/* In a real app, you could add logic to show a user's profile image here */}
         <User size={24} />
       </div>
 
       <form onSubmit={handleSubmit(onSubmit)} className="comment-form">
         <div className="comment-form-input-group">
-          {/* A hidden label for screen reader accessibility */}
           <label htmlFor="comment-text" className="sr-only">
             Your comment
           </label>
           <textarea
             id="comment-text"
             {...register("text")}
-            className="form-input" // Re-using our master input style!
+            className="form-input"
             placeholder="Add a comment..."
             rows={3}
             required
           />
         </div>
 
-        {/* Container for actions to align them correctly on the right */}
         <div className="comment-form-actions">
           {error && <p className="form-error-inline">{error}</p>}
           <button type="submit" className="form-submit-button small">
