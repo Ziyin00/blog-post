@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const instance = axios.create({
-  baseURL: "http://localhost:3032/api", // backend base URL
+  baseURL: "https://blog-backend-7g6p.onrender.com/api", // backend base URL
   headers: {},
 });
 
