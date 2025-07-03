@@ -1,0 +1,813 @@
+@import "tailwindcss";
+/* app/globals.css */
+
+/* 1. FONT SETUP */
+@import url('https://fonts.googleapis.com/css2?family=Figtree:wght@400;700;900&display=swap');
+
+/* 2. CSS VARIABLES & THEME DEFINITIONS */
+:root {
+  /* -- LIGHT THEME -- */
+  --gradient-background: linear-gradient(125deg, #f5fbff 0%, #e0e7f0 100%);
+  --gradient-accent: linear-gradient(90deg, #6a11cb 0%, #2575fc 100%);
+  
+  --color-surface-background: rgba(255, 255, 255, 0.5);
+  --color-surface-border: rgba(255, 255, 255, 0.7);
+  
+  --color-text-primary: #1d2b35;
+  --color-text-secondary: #5a646a;
+  --color-text-heading: #1a202c;
+
+  --shadow-color: rgba(45, 55, 72, 0.1);
+  --transition-speed: 0.3s;
+}
+
+.dark {
+  /* -- DARK THEME -- */
+  --gradient-background: linear-gradient(125deg, #1f2228 0%, #0d1117 100%);
+  --gradient-accent: linear-gradient(90deg, #f86cfc 0%, #46a6ff 100%);
+
+  --color-surface-background: rgba(29, 35, 42, 0.5);
+  --color-surface-border: rgba(255, 255, 255, 0.1);
+
+  --color-text-primary: #c9d1d9;
+  --color-text-secondary: #8b949e;
+  --color-text-heading: #ffffff;
+
+  --shadow-color: rgba(0, 0, 0, 0.4);
+}
+
+/* 3. GLOBAL STYLES */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Figtree', sans-serif;
+  background: var(--gradient-background);
+  color: var(--color-text-primary);
+  transition: background var(--transition-speed) ease;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  min-height: 100vh;
+}
+
+/* 4. THEME TOGGLE STYLES */
+.theme-toggle {
+  position: fixed;
+  top: 1.5rem;
+  right: 1.5rem;
+  z-index: 999;
+
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 1px solid var(--color-surface-border);
+  background: var(--color-surface-background);
+  
+  /* Glassmorphism Effect */
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  
+  transition: background 0.2s ease, transform 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+  box-shadow: 0 4px 20px var(--shadow-color);
+}
+
+.theme-toggle:hover {
+  transform: scale(1.1) rotate(15deg);
+}
+
+.theme-toggle svg {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  color: var(--color-text-heading);
+  transition: opacity 0.25s ease, transform 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+}
+
+/* Sun icon is visible in LIGHT mode */
+.sun-icon {
+  opacity: 1;
+  transform: scale(1) rotate(0deg);
+}
+.dark .sun-icon {
+  opacity: 0;
+  transform: scale(0.5) rotate(-90deg);
+}
+
+/* Moon icon is visible in DARK mode */
+.moon-icon {
+  opacity: 0;
+  transform: scale(0.5) rotate(90deg);
+}
+.dark .moon-icon {
+  opacity: 1;
+  transform: scale(1) rotate(0deg);
+}
+
+/* 5. DEMO CONTENT (You can replace this with your blog styles) */
+main {
+  padding: 8rem 2rem 2rem;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+h1 {
+  font-size: 3.5rem;
+  font-weight: 900;
+  line-height: 1.1;
+  margin-bottom: 2rem;
+  /* The beautiful gradient text */
+  background: var(--gradient-accent);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-fill-color: transparent;
+}
+
+/* ==================================================================
+   6. NAVBAR STYLES
+   ================================================================== */
+
+/* Main header container that sticks to the top */
+.main-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+  padding: 1rem 0; /* Add padding to create space for the glass effect */
+  transition: all var(--transition-speed) ease;
+}
+
+/* The actual navbar with the glassmorphism effect */
+.navbar-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1200px; /* Or your preferred max content width */
+  margin: 0 auto;
+  padding: 0.75rem 2rem; /* Inner padding for navbar content */
+
+  /* The Glass Effect */
+  background: var(--color-surface-background);
+  border: 1px solid var(--color-surface-border);
+  border-radius: 50px; /* A pill shape for a very modern feel */
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  
+  box-shadow: 0 8px 32px 0 var(--shadow-color);
+  transition: all var(--transition-speed) ease;
+}
+
+/* Style for the 'BlogApp' brand name */
+.navbar-brand {
+  font-size: 1.5rem;
+  font-weight: 900;
+  text-decoration: none;
+  /* The "wow" factor: gradient text */
+  background: var(--gradient-accent);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-fill-color: transparent;
+}
+
+/* Container for the navigation links */
+.navbar-links {
+  display: flex;
+  align-items: center;
+  gap: 2rem; /* Consistent spacing between links */
+}
+
+/* Shared style for all navigation items (<a> and <button>) */
+.nav-link {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--color-text-secondary);
+  text-decoration: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.25rem 0;
+  position: relative; /* Required for the animated underline */
+  transition: color var(--transition-speed) ease;
+}
+
+.nav-link:hover {
+  color: var(--color-text-heading);
+}
+
+/* The magic animated underline */
+.nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: var(--gradient-accent);
+  transform: scaleX(0);
+  transform-origin: center;
+  transition: transform 0.3s cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+/* Animate the underline in on hover */
+.nav-link:hover::after {
+  transform: scaleX(1);
+}
+
+/* The active link is always fully colored and underlined */
+.nav-link.active {
+  color: var(--color-text-heading);
+}
+
+.nav-link.active::after {
+  transform: scaleX(1);
+}
+
+/* Container for right-side actions like the theme toggle */
+.navbar-actions {
+  display: flex;
+  align-items: center;
+}
+
+/* Small adjustment to the ThemeToggle position since it's now inside the nav */
+.theme-toggle {
+    position: static; /* Override the 'fixed' position from the previous step */
+    width: 40px;
+    height: 40px;
+}
+
+/* ==================================================================
+   7. HOME PAGE & POST GRID STYLES
+   ================================================================== */
+
+/* A container for page content to keep it centered and spaced */
+.page-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  /* Adjust top padding to be below the fixed navbar */
+  padding: 3rem 2rem 2rem; 
+}
+
+.page-header {
+  margin-bottom: 4rem;
+  text-align: center;
+}
+
+.page-title {
+  font-size: 3.5rem;
+  font-weight: 900;
+  line-height: 1.1;
+  color: var(--color-text-heading);
+  /* The "wow" factor: gradient text */
+  background: var(--gradient-accent);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-fill-color: transparent;
+}
+
+/* For "Loading..." or "No posts..." messages */
+.status-message {
+  text-align: center;
+  font-size: 1.1rem;
+  color: var(--color-text-secondary);
+  font-style: italic;
+  padding: 4rem 0;
+}
+
+/* The responsive post grid */
+.posts-grid {
+  display: grid;
+  /* Creates responsive columns: they are at least 320px wide, 
+     but will grow to fill space. New columns are added when space allows. */
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 2rem;
+}
+
+/* The Post Card itself (the <Link> tag) */
+.post-card {
+  display: flex;
+  flex-direction: column;
+  text-decoration: none;
+  border-radius: var(--border-radius, 12px);
+  overflow: hidden; /* Ensures child elements respect the border radius */
+  
+  /* The Glass Effect */
+  background: var(--color-surface-background);
+  border: 1px solid var(--color-surface-border);
+  box-shadow: 0 8px 32px 0 var(--shadow-color);
+  
+  transition: transform var(--transition-speed) ease, box-shadow var(--transition-speed) ease;
+}
+
+/* The "lift" hover effect */
+.post-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 16px 45px 0 var(--shadow-color);
+}
+
+/* Wrapper for the image to contain the zoom effect */
+.post-card-image-wrapper {
+  position: relative;
+  width: 100%;
+  padding-top: 56.25%; /* 16:9 Aspect Ratio */
+  overflow: hidden;
+}
+
+/* The actual image inside the wrapper */
+.post-card-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+/* The "zoom" hover effect for the image */
+.post-card:hover .post-card-image {
+  transform: scale(1.05);
+}
+
+/* A beautiful fallback for posts without an image */
+.post-card-image-placeholder {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--gradient-background);
+}
+.post-card-image-placeholder span {
+    font-size: 4rem;
+    font-weight: 900;
+    background: var(--gradient-accent);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-fill-color: transparent;
+    opacity: 0.5;
+}
+
+/* The container for the card's text content */
+.post-card-content {
+  padding: 1.5rem;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.post-card-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--color-text-heading);
+  margin-bottom: 0.5rem;
+  line-height: 1.3;
+}
+
+.post-card-description {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: var(--color-text-secondary);
+}
+
+/* ==================================================================
+   8. POST DETAIL PAGE STYLES
+   ================================================================== */
+
+/* Main container for the entire post page */
+.post-detail-page {
+  /* No max-width here, let the children control their own width */
+  margin: 0 auto;
+  padding-top: 8rem; /* Space for the fixed navbar */
+  padding-bottom: 4rem;
+}
+
+/* --- Post Header --- */
+.post-header-container {
+  position: relative;
+  text-align: center;
+  padding: 6rem 2rem;
+  margin-bottom: 4rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.post-featured-image-wrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+}
+
+.post-featured-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.post-featured-image-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  /* A gradient overlay to ensure text is readable over any image */
+  background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.4) 50%, rgba(0,0,0,0.8) 100%);
+  .dark & {
+    background: linear-gradient(to top, var(--gradient-background) 0%, rgba(0,0,0,0.6) 50%, var(--gradient-background) 100%);
+  }
+}
+
+.post-header-content {
+  max-width: 800px;
+  color: #fff; /* White text looks best on the overlay */
+}
+
+.post-title {
+  font-size: 3.5rem;
+  font-weight: 900;
+  line-height: 1.1;
+  text-shadow: 0 2px 15px rgba(0,0,0,0.5);
+  margin: 0;
+}
+
+.post-meta {
+  margin-top: 1rem;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  opacity: 0.8;
+}
+
+/* --- Post Body Content --- */
+.post-body-content {
+  max-width: 720px; /* Optimal reading width */
+  margin: 0 auto;
+  padding: 0 1rem;
+  font-family: 'Georgia', 'Times New Roman', serif; /* Serif for readability */
+  font-size: 1.125rem; /* 18px */
+  line-height: 1.8;
+  color: var(--color-text-primary);
+}
+
+.post-body-content p { margin-bottom: 1.5em; }
+.post-body-content h2 { 
+  font-family: 'Figtree', sans-serif; /* Use sans-serif for headings */
+  font-size: 2rem;
+  margin-top: 2em;
+  margin-bottom: 1em;
+  color: var(--color-text-heading);
+  border-left: 4px solid;
+  border-image: var(--gradient-accent) 1;
+  padding-left: 0.75rem;
+}
+.post-body-content blockquote {
+  margin: 2em 0;
+  padding: 1em 1.5em;
+  border-left: 4px solid;
+  border-image: var(--gradient-accent) 1;
+  background-color: var(--color-surface-background);
+  border-radius: 0 var(--border-radius) var(--border-radius) 0;
+  font-style: italic;
+  font-size: 1.2rem;
+  color: var(--color-text-secondary);
+}
+
+
+/* ==================================================================
+   9. COMMENTS SECTION STYLES
+   ================================================================== */
+.comments-section {
+  background: var(--color-surface-background);
+  margin-top: 5rem;
+  padding: 4rem 0;
+  border-top: 1px solid var(--color-surface-border);
+}
+
+.comments-container {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.comments-title {
+  font-size: 2rem;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 2rem;
+  color: var(--color-text-heading);
+}
+
+.comments-list {
+  margin-top: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.no-comments-message {
+  text-align: center;
+  color: var(--color-text-secondary);
+  padding: 2rem;
+  font-style: italic;
+}
+
+.comment-card {
+  padding: 1.5rem;
+  border-radius: var(--border-radius);
+  border: 1px solid var(--color-surface-border);
+  background: var(--color-surface-background); /* A slightly different background */
+  box-shadow: 0 4px 10px var(--shadow-color);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+}
+/* Use a different bg for dark mode to make comments pop */
+.dark .comment-card {
+  --color-surface-background: rgba(40, 48, 59, 0.6);
+}
+
+.comment-text {
+  color: var(--color-text-primary);
+  line-height: 1.6;
+  margin: 0;
+}
+
+.comment-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--color-surface-border);
+  font-size: 0.875rem;
+}
+
+.comment-author {
+  font-weight: 700;
+  color: var(--color-text-heading);
+}
+
+.comment-date {
+  color: var(--color-text-secondary);
+}
+
+/* ==================================================================
+   10. FORMS & INPUTS STYLES
+   ================================================================== */
+
+/* Use page-container for consistent spacing */
+.form-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2.5rem 3rem;
+
+  /* The Glass Effect */
+  background: var(--color-surface-background);
+  border: 1px solid var(--color-surface-border);
+  border-radius: var(--border-radius, 12px);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 8px 32px 0 var(--shadow-color);
+}
+
+.form-header {
+  text-align: center;
+  margin-bottom: 2.5rem;
+}
+
+.form-title {
+  font-size: 2.25rem;
+  font-weight: 900;
+  color: var(--color-text-heading);
+  margin-bottom: 0.5rem;
+}
+
+.form-subtitle {
+  font-size: 1rem;
+  color: var(--color-text-secondary);
+}
+
+.form-body {
+  display: flex;
+  flex-direction: column;
+  gap: 1.75rem; /* Space between form groups */
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-label {
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: var(--color-text-secondary);
+  margin-bottom: 0.5rem;
+}
+
+/* Universal style for text inputs and textareas */
+.form-input {
+  width: 100%;
+  padding: 0.875rem 1rem;
+  font-size: 1rem;
+  font-family: inherit;
+  color: var(--color-text-primary);
+  background-color: var(--color-surface-background);
+  border: 1px solid var(--color-surface-border);
+  border-radius: 8px;
+  transition: all var(--transition-speed) ease;
+}
+
+.dark .form-input {
+  background-color: rgba(0,0,0,0.2);
+}
+
+.form-input::placeholder {
+  color: var(--color-text-secondary);
+  opacity: 0.7;
+}
+
+/* The 'glow' on focus - a key professional touch */
+.form-input:focus {
+  outline: none;
+  border-color: transparent;
+  box-shadow: 0 0 0 2px var(--color-text-heading), 0 0 0 4px rgba(var(--color-brand-rgb), 0.5);
+  background-color: var(--color-surface-background);
+}
+/* We need to define the brand color as RGB for the shadow */
+:root { --color-brand-rgb: 106, 17, 203; }
+.dark { --color-brand-rgb: 70, 166, 255; }
+
+
+/* --- The Custom File Input --- */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+.file-drop-zone {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  border: 2px dashed var(--color-surface-border);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: border-color var(--transition-speed) ease, background-color var(--transition-speed) ease;
+  min-height: 200px;
+  position: relative; /* For the preview image */
+}
+
+.file-drop-zone:hover {
+  border-color: var(--color-text-heading);
+  background-color: var(--color-button-hover); /* From our theme setup */
+}
+
+.file-drop-zone-prompt {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  color: var(--color-text-secondary);
+}
+.file-drop-zone-icon { width: 48px; height: 48px; margin-bottom: 1rem; color: var(--color-text-secondary); }
+.file-drop-zone-text { font-size: 1rem; }
+.file-drop-zone-text .text-accent {
+  color: var(--color-text-heading);
+  background: var(--gradient-accent);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-fill-color: transparent;
+}
+.file-drop-zone-subtext { font-size: 0.8rem; margin-top: 0.25rem; opacity: 0.8; }
+
+.file-preview-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 6px; /* Slightly smaller than parent for a nice inset look */
+}
+
+/* --- Submit Button --- */
+.form-submit-button {
+  width: 100%;
+  padding: 1rem;
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: #fff;
+  background: var(--gradient-accent);
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+}
+
+.form-submit-button:hover {
+  transform: translateY(-3px);
+  filter: brightness(1.1);
+  box-shadow: 0 7px 20px rgba(0,0,0,0.3);
+}
+
+/* --- Error Message --- */
+.form-error {
+  padding: 1rem;
+  border-radius: 8px;
+  background-color: rgba(239, 68, 68, 0.1); /* Soft red background */
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  color: #ef4444; /* A nice red text color */
+  font-weight: 500;
+  margin-bottom: 1.5rem;
+}
+.dark .form-error {
+  color: #fca5a5;
+}
+
+/* ==================================================================
+   12. SEARCH BAR STYLES
+   ================================================================== */
+
+   .search-bar-container {
+    position: relative;
+    max-width: 800px;
+    margin: 0 auto 3rem; /* Center it and give it space below */
+  }
+  
+  .search-bar-icon {
+    position: absolute;
+    top: 50%;
+    left: 1rem;
+    transform: translateY(-50%);
+    color: var(--color-text-secondary);
+    pointer-events: none; /* Allows clicks to go through to the input */
+    width: 20px;
+    height: 20px;
+  }
+  
+  .search-bar-input {
+    /* Inherit styles from our master form-input class for consistency */
+    composes: form-input; 
+    width: 100%;
+    padding: 1rem 1rem 1rem 3rem; /* Extra left padding for the icon */
+    font-size: 1rem;
+    border-radius: 50px; /* A pill shape for a modern search bar */
+  }
+  
+  /* Ensure the focus style is also applied */
+  .search-bar-input:focus {
+    outline: none;
+    border-color: transparent;
+    box-shadow: 0 0 0 2px var(--color-text-heading), 0 0 0 4px rgba(var(--color-brand-rgb), 0.5);
+    background-color: var(--color-surface-background);
+  }
+
+  /* Alternative CSS if you're not using CSS Modules */
+.search-bar-input {
+  width: 100%;
+  padding: 1rem 1rem 1rem 3rem; /* Extra left padding for the icon */
+  font-size: 1rem;
+  font-family: inherit;
+  color: var(--color-text-primary);
+  background-color: var(--color-surface-background);
+  border: 1px solid var(--color-surface-border);
+  border-radius: 50px; /* Pill shape */
+  transition: all var(--transition-speed) ease;
+}
+.dark .search-bar-input {
+  background-color: rgba(0,0,0,0.2);
+}
+.search-bar-input::placeholder {
+  color: var(--color-text-secondary);
+  opacity: 0.7;
+}
