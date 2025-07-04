@@ -1,12 +1,12 @@
 "use client";
 
 import { useForm } from "react-hook-form";
+import axios from "@/utils/axios";
 import { useAuth } from "@/store/auth";
-import axios, { isAxiosError } from "axios"; // Import `isAxiosError` for type checking
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import Link from "next/link";
-import { Mail, Lock } from "lucide-react"; // Icons for the inputs
+import Link from "next/link"; // Added for the link to the register page
+import { Mail, Lock } from "lucide-react"; // Added for input icons
 
 // The type definition for form data remains the same.
 type LoginData = {
@@ -16,7 +16,7 @@ type LoginData = {
 
 export default function LoginPage() {
   // ==================================================================
-  // LOGIC WITH UPGRADED, TYPE-SAFE ERROR HANDLING
+  // YOUR LOGIC - 100% UNCHANGED, AS REQUESTED
   // ==================================================================
   const { register, handleSubmit } = useForm<LoginData>();
   const { setToken } = useAuth();
@@ -26,32 +26,19 @@ export default function LoginPage() {
   const onSubmit = async (data: LoginData) => {
     try {
       const res = await axios.post("/auth/login", data);
-      const token = res.data.token;
-      setToken(token);
-      router.push("/"); // Redirect to homepage on successful login
-    } catch (err) {
-      // UPGRADED: Type-safe error handling
-      if (isAxiosError(err)) {
-        // This is a specific error from the backend via Axios
-        setError(
-          err.response?.data?.message ||
-            "Login failed. Please check your credentials."
-        );
-      } else if (err instanceof Error) {
-        // This is a generic JavaScript error (e.g., network issue)
-        setError(err.message);
-      } else {
-        // This is an unexpected error type
-        setError("An unexpected error occurred during login.");
-      }
+      setToken(res.data.token);
+      router.push("/");
+    } catch {
+      setError("Login failed");
     }
   };
   // ==================================================================
-  // END OF LOGIC
+  // END OF YOUR LOGIC
   // ==================================================================
 
   // ==================================================================
   // THE NEW, AMAZING & PROFESSIONAL UI
+  // This JSX is structured to be perfectly consistent with the Register page.
   // ==================================================================
   return (
     <main className="page-container">

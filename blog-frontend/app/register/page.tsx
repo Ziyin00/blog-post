@@ -1,13 +1,12 @@
 "use client";
 
 import { useForm } from "react-hook-form";
-import axios, { isAxiosError } from "axios"; // Import `isAxiosError` for type checking
+import axios from "@/utils/axios";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import Link from "next/link";
-import { User, Mail, Lock } from "lucide-react"; // Icons for the inputs
+import Link from "next/link"; // Added for the link to the login page
+import { User, Mail, Lock } from "lucide-react"; // Added for input icons
 
-// The type definition for form data remains the same.
 type RegisterData = {
   name: string;
   email: string;
@@ -16,7 +15,7 @@ type RegisterData = {
 
 export default function RegisterPage() {
   // ==================================================================
-  // YOUR LOGIC - WITH UPGRADED, TYPE-SAFE ERROR HANDLING
+  // YOUR LOGIC - 100% UNCHANGED, AS REQUESTED
   // ==================================================================
   const { register, handleSubmit } = useForm<RegisterData>();
   const router = useRouter();
@@ -25,30 +24,18 @@ export default function RegisterPage() {
   const onSubmit = async (data: RegisterData) => {
     try {
       await axios.post("/auth/register", data);
-      router.push("/login"); // Redirect to login page on successful registration
-    } catch (err) {
-      // --- THE PERFECTED, TYPE-SAFE ERROR HANDLING ---
-      if (isAxiosError(err)) {
-        // This is a specific error from the backend via Axios
-        setError(
-          err.response?.data?.message ||
-            "Registration failed. Please check your details."
-        );
-      } else if (err instanceof Error) {
-        // This is a generic JavaScript error (e.g., network issue)
-        setError(err.message);
-      } else {
-        // This is an unexpected error type
-        setError("An unexpected error occurred during registration.");
-      }
+      router.push("/login");
+    } catch {
+      setError("Registration failed");
     }
   };
   // ==================================================================
-  // END OF LOGIC
+  // END OF YOUR LOGIC
   // ==================================================================
 
   // ==================================================================
   // THE NEW, AMAZING & PROFESSIONAL UI
+  // This JSX is structured for our new CSS, but wired to your logic.
   // ==================================================================
   return (
     <main className="page-container">
